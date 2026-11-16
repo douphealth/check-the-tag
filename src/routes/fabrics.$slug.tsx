@@ -1,0 +1,22 @@
+import { createFileRoute, notFound } from "@tanstack/react-router";
+import { FABRIC_ARTICLES, fabricImage } from "@/lib/articles";
+import { ArticleView } from "@/components/ctt/ArticleView";
+
+export const Route = createFileRoute("/fabrics/$slug")({
+  loader: ({ params }) => {
+    const a = FABRIC_ARTICLES.find((x) => x.slug === params.slug);
+    if (!a) throw notFound();
+    return a;
+  },
+  head: ({ loaderData: a }) => ({
+    meta: a
+      ? [{ title: `${a.title} | Check The Tag` }, { name: "description", content: a.description }, { property: "og:title", content: a.title }, { property: "og:description", content: a.description }, { property: "og:type", content: "article" }]
+      : [{ title: "Unavailable | Check The Tag" }, { name: "robots", content: "noindex" }],
+  }),
+  component: Page,
+});
+
+function Page() {
+  const a = Route.useLoaderData();
+  return <ArticleView a={a} back="/fabrics" kind="fabrics" image={fabricImage(a.slug)} />;
+}

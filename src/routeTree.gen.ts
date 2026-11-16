@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SourcesRouteImport } from './routes/sources'
+import { Route as WashDayRouteImport } from './routes/wash-day'
+import { Route as FabricsIndexRouteImport } from './routes/fabrics.index'
+import { Route as FabricsSlugRouteImport } from './routes/fabrics.$slug'
+import { Route as GuidesIndexRouteImport } from './routes/guides.index'
+import { Route as GuidesSlugRouteImport } from './routes/guides.$slug'
+import { Route as SymbolsIndexRouteImport } from './routes/symbols.index'
+import { Route as SymbolsIdRouteImport } from './routes/symbols.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SourcesRoute = SourcesRouteImport.update({
+  id: '/sources',
+  path: '/sources',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WashDayRoute = WashDayRouteImport.update({
+  id: '/wash-day',
+  path: '/wash-day',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FabricsIndexRoute = FabricsIndexRouteImport.update({
+  id: '/fabrics/',
+  path: '/fabrics/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FabricsSlugRoute = FabricsSlugRouteImport.update({
+  id: '/fabrics/$slug',
+  path: '/fabrics/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesIndexRoute = GuidesIndexRouteImport.update({
+  id: '/guides/',
+  path: '/guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GuidesSlugRoute = GuidesSlugRouteImport.update({
+  id: '/guides/$slug',
+  path: '/guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SymbolsIndexRoute = SymbolsIndexRouteImport.update({
+  id: '/symbols/',
+  path: '/symbols/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SymbolsIdRoute = SymbolsIdRouteImport.update({
+  id: '/symbols/$id',
+  path: '/symbols/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/sources': typeof SourcesRoute
+  '/wash-day': typeof WashDayRoute
+  '/fabrics/$slug': typeof FabricsSlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
+  '/symbols/$id': typeof SymbolsIdRoute
+  '/fabrics/': typeof FabricsIndexRoute
+  '/guides/': typeof GuidesIndexRoute
+  '/symbols/': typeof SymbolsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/sources': typeof SourcesRoute
+  '/wash-day': typeof WashDayRoute
+  '/fabrics/$slug': typeof FabricsSlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
+  '/symbols/$id': typeof SymbolsIdRoute
+  '/fabrics': typeof FabricsIndexRoute
+  '/guides': typeof GuidesIndexRoute
+  '/symbols': typeof SymbolsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/sources': typeof SourcesRoute
+  '/wash-day': typeof WashDayRoute
+  '/fabrics/$slug': typeof FabricsSlugRoute
+  '/guides/$slug': typeof GuidesSlugRoute
+  '/symbols/$id': typeof SymbolsIdRoute
+  '/fabrics/': typeof FabricsIndexRoute
+  '/guides/': typeof GuidesIndexRoute
+  '/symbols/': typeof SymbolsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/sources'
+    | '/wash-day'
+    | '/fabrics/$slug'
+    | '/guides/$slug'
+    | '/symbols/$id'
+    | '/fabrics/'
+    | '/guides/'
+    | '/symbols/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/sources'
+    | '/wash-day'
+    | '/fabrics/$slug'
+    | '/guides/$slug'
+    | '/symbols/$id'
+    | '/fabrics'
+    | '/guides'
+    | '/symbols'
+  id:
+    | '__root__'
+    | '/'
+    | '/sources'
+    | '/wash-day'
+    | '/fabrics/$slug'
+    | '/guides/$slug'
+    | '/symbols/$id'
+    | '/fabrics/'
+    | '/guides/'
+    | '/symbols/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  SourcesRoute: typeof SourcesRoute
+  WashDayRoute: typeof WashDayRoute
+  FabricsSlugRoute: typeof FabricsSlugRoute
+  GuidesSlugRoute: typeof GuidesSlugRoute
+  SymbolsIdRoute: typeof SymbolsIdRoute
+  FabricsIndexRoute: typeof FabricsIndexRoute
+  GuidesIndexRoute: typeof GuidesIndexRoute
+  SymbolsIndexRoute: typeof SymbolsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +156,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/sources': {
+      id: '/sources'
+      path: '/sources'
+      fullPath: '/sources'
+      preLoaderRoute: typeof SourcesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/wash-day': {
+      id: '/wash-day'
+      path: '/wash-day'
+      fullPath: '/wash-day'
+      preLoaderRoute: typeof WashDayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fabrics/': {
+      id: '/fabrics/'
+      path: '/fabrics'
+      fullPath: '/fabrics/'
+      preLoaderRoute: typeof FabricsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fabrics/$slug': {
+      id: '/fabrics/$slug'
+      path: '/fabrics/$slug'
+      fullPath: '/fabrics/$slug'
+      preLoaderRoute: typeof FabricsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/': {
+      id: '/guides/'
+      path: '/guides'
+      fullPath: '/guides/'
+      preLoaderRoute: typeof GuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/guides/$slug': {
+      id: '/guides/$slug'
+      path: '/guides/$slug'
+      fullPath: '/guides/$slug'
+      preLoaderRoute: typeof GuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/symbols/': {
+      id: '/symbols/'
+      path: '/symbols'
+      fullPath: '/symbols/'
+      preLoaderRoute: typeof SymbolsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/symbols/$id': {
+      id: '/symbols/$id'
+      path: '/symbols/$id'
+      fullPath: '/symbols/$id'
+      preLoaderRoute: typeof SymbolsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  SourcesRoute: SourcesRoute,
+  WashDayRoute: WashDayRoute,
+  FabricsSlugRoute: FabricsSlugRoute,
+  GuidesSlugRoute: GuidesSlugRoute,
+  SymbolsIdRoute: SymbolsIdRoute,
+  FabricsIndexRoute: FabricsIndexRoute,
+  GuidesIndexRoute: GuidesIndexRoute,
+  SymbolsIndexRoute: SymbolsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,29 +1,23 @@
-# Welcome to your Lovable project
+# Check The Tag
 
-This project was built with [Lovable](https://lovable.dev).
+**Decode any laundry care label in seconds.** Tap the marks you see on a clothing tag and get one plain-language instruction, along with risk warnings and fibre-specific advice.
 
-## Build with Lovable
+## Features
+- **Interactive decoder**: 78 illustrated ISO 3758:2023 and U.S. (FTC/ASTM) symbols. It shows label coverage, warnings when marks conflict, fabric notes, and links you can share.
+- **Symbol library**: instant search and filters, plus a detail page for every mark.
+- **Fabric field guides** for 10 fibres, and **problem-solver guides** for 7 common laundry mishaps.
+- **Wash-day planner**: save garments, then group them into compatible loads by colour, cycle and the lowest temperature on any label in the load.
+- **Symbol quiz**, a draggable hero, and motion throughout (it respects the reduced-motion setting).
+- Private by design: no accounts and no tracking. Your wardrobe is stored only in your browser.
 
-Open your project in the [Lovable editor](https://lovable.dev) and keep building.
+## Stack
+TanStack Start (React 19, SSR), Tailwind CSS v4, Framer Motion, Vitest.
 
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: connect the project to GitHub and every change made in Lovable is committed straight to your repository.
-- **Full ownership**: this code is yours. Push to your repository and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
-
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
+```bash
+bun install
+bun run dev
+bunx vitest run
 ```
 
-## Built with
-
-- TanStack Start
-- TypeScript
-- React
-- Tailwind CSS
+## Sources
+ISO 3758:2023, GINETEX public descriptions, the FTC-hosted ASTM D5489 chart, and Woolmark. The symbol drawings are original teaching diagrams, not licensed official artwork. Always follow the garment maker's full label.

@@ -28,3 +28,8 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Check The Tag
+- Care-symbol data and decoding rules live in `src/lib/ctt/*.js` (ported from the original static site), with sibling `.d.ts` files for types. Change behaviour there, not in components, so pages and tests share one engine.
+- Article content for fabrics and guides is static JSON in `src/data/articles.json`. It needs no backend.
+- The wardrobe is browser-only localStorage (`src/lib/wardrobe-store.ts`), so the app has no accounts.
