@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "sonner";
 import { Droplets, Thermometer, Trash2 } from "lucide-react";
 import { computePlan, type Garment } from "@/lib/ctt/planner";
 import { SYMBOL_BY_ID } from "@/lib/ctt/catalog";
@@ -16,6 +17,8 @@ export const Route = createFileRoute("/wash-day")({
       { name: "description", content: "Save decoded garments and sort them into compatible machine loads by colour, cycle and the lowest temperature on each label." },
       { property: "og:title", content: "Wash-day planner" },
       { property: "og:description", content: "Group your saved garments into safe, compatible wash loads." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: WashDay,
@@ -31,13 +34,21 @@ function WashDay() {
     setItems(loadWardrobe());
     try { setColours(JSON.parse(localStorage.getItem("ctt-colours") || "{}")); } catch { /* ignore */ }
   }, []);
-  const setColour = (id: string, c: string) => { const n = { ...colours, [id]: c }; setColours(n); localStorage.setItem("ctt-colours", JSON.stringify(n)); };
-  const remove = (id: string) => { const n = items.filter((x) => x.id !== id); setItems(n); saveWardrobe(n); };
+  const setColour = (id: string, c: string) => {
+    const next = { ...colours, [id]: c };
+    try { localStorage.setItem("ctt-colours", JSON.stringify(next)); setColours(next); }
+    catch { toast.error("This browser blocked storage. The colour choice was not saved."); }
+  };
+  const remove = (id: string) => {
+    const next = items.filter((x) => x.id !== id);
+    if (!saveWardrobe(next)) { toast.error("This browser blocked storage. The garment was not removed."); return; }
+    setItems(next);
+  };
   const plan = useMemo(() => computePlan(items, colours), [items, colours]);
 
   return (
     <>
-      <PageHero eyebrow="Wash-day planner" title="Fewer loads. Zero shrinkage." lead="Garments you save from the decoder appear here. Tag each with a colour group and we build loads that respect the strictest label in the drum." />
+      <PageHero eyebrow="Wash-day planner" title="Fewer loads. The strictest label leads." lead="Garments you save from the decoder appear here. Tag each with a colour group and we build loads that respect the strictest label in the drum." />
       <div className="mx-auto grid max-w-7xl gap-8 px-5 lg:grid-cols-[1fr_1.1fr]">
         <section>
           <h2 className="text-2xl">Your garments <span className="text-muted-foreground">({items.length})</span></h2>

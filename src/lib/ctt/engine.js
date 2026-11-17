@@ -3,6 +3,22 @@ import {FABRICS, SYMBOL_BY_ID, STANDARDS} from './catalog';
 export const ALLOWED_GROUPS = Object.freeze(['wash','bleach','tumble','natural','iron','dryclean','wetclean']);
 export const MAX_SELECTIONS = 12;
 export const fabricIds = new Set(FABRICS.map(x=>x.id));
+export const CARE_CATEGORIES = Object.freeze([
+  {id:'wash',label:'Washing',groups:['wash']},
+  {id:'bleach',label:'Bleaching',groups:['bleach']},
+  {id:'dry',label:'Drying',groups:['tumble','natural']},
+  {id:'iron',label:'Ironing',groups:['iron']},
+  {id:'professional',label:'Professional care',groups:['dryclean','wetclean']}
+]);
+export const CATEGORY_STATES = Object.freeze(['absent','unreadable']);
+export function normalizeCategoryStates(value) {
+  const out={};
+  if(!value||typeof value!=='object'||Array.isArray(value))return out;
+  for(const category of CARE_CATEGORIES) {
+    if(CATEGORY_STATES.includes(value[category.id]))out[category.id]=value[category.id];
+  }
+  return out;
+}
 
 /** Preserve known selections only; never trust IDs or the standard from URL/localStorage. */
 export function normalizeSelection(value, standard='iso') {
@@ -100,9 +116,10 @@ const cautionForFiber = {
   blend:{title:'Blends / trims',message:'The printed care label applies to the whole article, including lining, trims, dyes and finishes — not just the main fabric.',source:'GINETEX'}
 };
 
-export function decodeCare(ids=[],standard='iso',fabric='unknown') {
+export function decodeCare(ids=[],standard='iso',fabric='unknown',categoryStates={}) {
   const safeStandard=STANDARDS[standard]?standard:'iso';
   const chosen=normalizeSelection(ids,safeStandard).map(id=>SYMBOL_BY_ID.get(id));
+  const requestedStates=normalizeCategoryStates(categoryStates);
   const washBase=chosen.find(s=>s.group==='wash'&&!s.glyph.modifier);
   const washModifier=chosen.find(s=>s.group==='wash'&&s.glyph.modifier);
   const wash=washBase||washModifier,bleach=byGroup(chosen,'bleach');
@@ -139,8 +156,12 @@ export function decodeCare(ids=[],standard='iso',fabric='unknown') {
     if(item.glyph.mode==='no-dry') addPhrase('extras','Extra caution','Do not dry; check the full printed label',item);
   }
   const sentence=phrases.length?phrases.join('; ').replace(/^./,c=>c.toUpperCase())+'.':'';
-  const mainCategories=[['wash',wash],['bleach',bleach],['dry',tumble||natural],['iron',ironBase],['professional',dryclean||wetclean]];
-  const missing=mainCategories.filter(([,symbol])=>!symbol).map(([key])=>key);
+  const categoryMap={wash,bleach,dry:tumble||natural,iron:ironBase,professional:dryclean||wetclean};
+  const provided=CARE_CATEGORIES.filter(c=>!!categoryMap[c.id]).map(c=>c.id);
+  const absent=CARE_CATEGORIES.filter(c=>!categoryMap[c.id]&&requestedStates[c.id]==='absent').map(c=>c.id);
+  const unreadable=CARE_CATEGORIES.filter(c=>!categoryMap[c.id]&&requestedStates[c.id]==='unreadable').map(c=>c.id);
+  const missing=CARE_CATEGORIES.filter(c=>!categoryMap[c.id]&&!requestedStates[c.id]).map(c=>c.id);
+  const states=Object.fromEntries(CARE_CATEGORIES.map(c=>[c.id,categoryMap[c.id]?'provided':requestedStates[c.id]||'unknown']));
   const risks=[];
   const pushRisk=(title,message,level='caution')=>{ if(message&&!risks.some(x=>x.message===message)) risks.push({title,message,level}); };
   if(wash?.glyph.mode==='none') pushRisk('Do not wash means do not wash',wash.risk,'important');
@@ -164,16 +185,18 @@ export function decodeCare(ids=[],standard='iso',fabric='unknown') {
   if(hasUnspecifiedTemp) notices.push('The selected wash-cycle mark does not specify water temperature. Check for dots or written instructions.');
   if(ironModifier&&!ironBase) notices.push('A “no steam” mark does not specify whether ironing is allowed or its maximum temperature; inspect the remaining tag.');
   if(tumbleModifier&&!tumbleBase) notices.push('The chosen dryer-cycle mark does not specify a heat setting; consult the complete label.');
-  if(!tumble&&!natural&&chosen.length) notices.push('No drying method selected. This guide does not assume the garment is dryer-safe.');
+  if(!tumble&&!natural&&chosen.length&&!requestedStates.dry) notices.push('No drying method entered. This guide does not assume the garment is dryer-safe.');
+  if(unreadable.length) notices.push(`Unreadable: ${unreadable.map(id=>CARE_CATEGORIES.find(c=>c.id===id).label).join(', ')}. No instruction is inferred for ${unreadable.length===1?'this category':'these categories'}.`);
+  if(absent.length) notices.push(`Marked not on the label: ${absent.map(id=>CARE_CATEGORIES.find(c=>c.id===id).label).join(', ')}. Absence is not treated as permission.`);
   if(!chosen.length) notices.push('Pick the marks you can see. Nothing is inferred from unselected symbols.');
   return {
     standard:safeStandard,selected:chosen,count:chosen.length,sentence,
-    fragments:phrases,details,missing,risks,notices,fibreNote,
-    coverage:5-missing.length,
+    fragments:phrases,details,missing,provided,absent,unreadable,states,risks,notices,fibreNote,
+    coverage:provided.length,
     groups:{wash,bleach,tumble,natural,iron,dryclean,wetclean}
   };
 }
-export function serializeShare(ids,standard,fabric,demo=false) {
+export function serializeShare(ids,standard,fabric,categoryStates={}) {
   const safeStandard=STANDARDS[standard]?standard:'iso';
   const safeFabric=fabricIds.has(fabric)?fabric:'unknown';
   const params=new URLSearchParams();
@@ -181,14 +204,27 @@ export function serializeShare(ids,standard,fabric,demo=false) {
   const clean=normalizeSelection(ids,safeStandard);
   if(clean.length) params.set('symbols',clean.join(','));
   if(safeFabric!=='unknown') params.set('fabric',safeFabric);
-  if(demo===true)params.set('demo','1');
+  const states=normalizeCategoryStates(categoryStates);
+  const absent=CARE_CATEGORIES.filter(c=>states[c.id]==='absent').map(c=>c.id);
+  const unreadable=CARE_CATEGORIES.filter(c=>states[c.id]==='unreadable').map(c=>c.id);
+  if(absent.length)params.set('absent',absent.join(','));
+  if(unreadable.length)params.set('unreadable',unreadable.join(','));
   return params;
 }
 export function parseShare(search) {
-  const params=new URLSearchParams((search||'').replace(/^\?/,''));
-  if(!params.has('system')&&!params.has('symbols')&&!params.has('fabric')) return null;
-  const standard=STANDARDS[params.get('system')]?params.get('system'):'iso';
-  const fabric=fabricIds.has(params.get('fabric'))?params.get('fabric'):'unknown';
-  const selected=normalizeSelection((params.get('symbols')||'').slice(0,400).split(','),standard);
-  return {standard,fabric,selected,demo:params.get('demo')==='1'&&selected.length>0};
+  let params;
+  try { params=new URLSearchParams(String(search||'').replace(/^\?/,'')); }
+  catch { return null; }
+  const legacy=!params.has('system')&&!params.has('symbols')&&(params.has('std')||params.has('s')||params.has('f'));
+  if(!legacy&&!params.has('system')&&!params.has('symbols')&&!params.has('fabric')&&!params.has('absent')&&!params.has('unreadable')) return null;
+  const standardValue=legacy?params.get('std'):params.get('system');
+  const standard=STANDARDS[standardValue]?standardValue:'iso';
+  const fabricValue=legacy?params.get('f'):params.get('fabric');
+  const fabric=fabricIds.has(fabricValue)?fabricValue:'unknown';
+  const symbolValue=legacy?params.get('s'):params.get('symbols');
+  const selected=normalizeSelection((symbolValue||'').slice(0,400).split(','),standard);
+  const requested={};
+  for(const id of (params.get('absent')||'').split(','))if(CARE_CATEGORIES.some(c=>c.id===id))requested[id]='absent';
+  for(const id of (params.get('unreadable')||'').split(','))if(CARE_CATEGORIES.some(c=>c.id===id))requested[id]='unreadable';
+  return {standard,fabric,selected,states:normalizeCategoryStates(requested),demo:params.get('demo')==='1'&&selected.length>0};
 }

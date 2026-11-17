@@ -8,7 +8,7 @@
 - **Fabric field guides** for 10 fibres, and **problem-solver guides** for 7 common laundry mishaps.
 - **Wash-day planner**: save garments, then group them into compatible loads by colour, cycle and the lowest temperature on any label in the load.
 - **Symbol quiz**, a draggable hero, and motion throughout (it respects the reduced-motion setting).
-- Private by design: no accounts and no tracking. Your wardrobe is stored only in your browser.
+- No account required: your wardrobe is stored only in this browser. Removing garments or clearing site data deletes it; hosting and error diagnostics can still process technical request data.
 
 ## Stack
 TanStack Start (React 19, SSR), Tailwind CSS v4, Framer Motion, Vitest.
@@ -20,4 +20,4 @@ bunx vitest run
 ```
 
 ## Sources
-ISO 3758:2023, GINETEX public descriptions, the FTC-hosted ASTM D5489 chart, and Woolmark. The symbol drawings are original teaching diagrams, not licensed official artwork. Always follow the garment maker's full label.
+ISO 3758:2023, GINETEX public descriptions, the FTC-hosted ASTM D5489 chart, and Woolmark. The symbol drawings are original teaching diagrams; no license, certification or affiliation is claimed, and original drawings do not establish trademark or reproduction rights. See `/sources` for the editorial review record and unresolved artwork-clearance requirement. Always follow the garment maker's full label.

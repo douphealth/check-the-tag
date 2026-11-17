@@ -10,6 +10,8 @@ export const Route = createFileRoute("/fabrics/")({
       { name: "description", content: "Wool, silk, linen, denim and more — what each fibre fears, and how to read its label." },
       { property: "og:title", content: "Fabric care guides" },
       { property: "og:description", content: "Wool, silk, linen, denim and more — what each fibre fears, and how to read its label." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Page,

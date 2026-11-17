@@ -15,6 +15,8 @@ export const Route = createFileRoute("/symbols/")({
       { name: "description", content: "Searchable library of ISO and U.S. laundry symbols: washing, bleach, drying, ironing and professional care, each in plain language." },
       { property: "og:title", content: "All 78 laundry care symbols explained" },
       { property: "og:description", content: "Search every washing, drying, ironing and dry-cleaning mark." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: SymbolsPage,

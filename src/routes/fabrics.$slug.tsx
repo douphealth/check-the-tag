@@ -10,7 +10,7 @@ export const Route = createFileRoute("/fabrics/$slug")({
   },
   head: ({ loaderData: a }) => ({
     meta: a
-      ? [{ title: `${a.title} | Check The Tag` }, { name: "description", content: a.description }, { property: "og:title", content: a.title }, { property: "og:description", content: a.description }, { property: "og:type", content: "article" }]
+      ? [{ title: `${a.title} | Check The Tag` }, { name: "description", content: a.description }, { property: "og:title", content: a.title }, { property: "og:description", content: a.description }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }]
       : [{ title: "Unavailable | Check The Tag" }, { name: "robots", content: "noindex" }],
   }),
   component: Page,

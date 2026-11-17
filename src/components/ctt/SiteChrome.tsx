@@ -56,12 +56,12 @@ export function SiteFooter() {
       <div className="mx-auto grid max-w-7xl gap-10 px-5 py-14 md:grid-cols-3">
         <div>
           <p className="font-display text-2xl">Check The Tag</p>
-          <p className="mt-3 max-w-xs text-sm opacity-75">Plain-language laundry symbol guidance based on ISO 3758:2023 and the FTC-hosted ASTM chart. Educational, not official artwork.</p>
+          <p className="mt-3 max-w-xs text-sm opacity-75">Plain-language guidance based on ISO 3758:2023 and the FTC-hosted ASTM chart. Original teaching diagrams; no license, certification or affiliation claimed.</p>
         </div>
         <div className="grid grid-cols-2 gap-2 text-sm">
           {NAV.map((n) => <Link key={n.to} to={n.to} className="opacity-80 hover:opacity-100">{n.label}</Link>)}
         </div>
-        <p className="text-sm opacity-60 md:text-right">Always defer to the garment maker's full label. Your saved garments stay on this device.</p>
+        <p className="text-sm opacity-60 md:text-right">Always defer to the garment maker's full label. No account required; saved garments stay in this browser and can be lost when site data is cleared.</p>
       </div>
     </footer>
   );

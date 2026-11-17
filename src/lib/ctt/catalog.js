@@ -12,11 +12,10 @@ export const STANDARDS = Object.freeze({
 export const STEPS = Object.freeze([
   {id:'wash', label:'Washing', short:'Wash', number:'01', caption:'Tub marks tell you how warm and how gentle.'},
   {id:'bleach', label:'Bleaching', short:'Bleach', number:'02', caption:'The triangle governs bleach — including chlorine.'},
-  {id:'tumble', label:'Tumble drying', short:'Tumble', number:'03', caption:'A circle inside a square signals machine drying.'},
-  {id:'natural', label:'Natural drying', short:'Air dry', number:'04', caption:'Vertical and horizontal lines signal how to air-dry.'},
-  {id:'iron', label:'Ironing', short:'Iron', number:'05', caption:'Dots set the maximum soleplate temperature.'},
-  {id:'care', label:'Professional care', short:'Pro care', number:'06', caption:'The circle tells a professional cleaner which processes are allowed.'},
-  {id:'extras', label:'Extra warnings', short:'Extras', number:'07', caption:'U.S. labels sometimes add specific warnings.'}
+  {id:'dry', label:'Drying', short:'Dry', number:'03', caption:'Choose each drying method shown. Tumble and air drying are separate subcategories.'},
+  {id:'iron', label:'Ironing', short:'Iron', number:'04', caption:'Dots set the maximum soleplate temperature.'},
+  {id:'professional', label:'Professional care', short:'Pro care', number:'05', caption:'Dry cleaning and wet cleaning are separate; select both if both appear.'},
+  {id:'extras', label:'Optional extra warnings', short:'Extras', number:'+', caption:'Optional U.S. warnings are not part of the five-category progress count.'}
 ]);
 export const FABRICS = Object.freeze([
   {id:'unknown', title:'Not sure', hint:'Read the tag only'},
@@ -146,6 +145,7 @@ export const sourceUrls = Object.freeze({
   licensing: 'https://www.ginetex.net/en/care-labelling/'
 });
 export function getSymbols(standard, stepId) {
-  return SYMBOLS.filter(s=>s.standard===standard && (stepId==='care'?['dryclean','wetclean'].includes(s.group):s.group===stepId));
+  const groups=stepId==='professional'?['dryclean','wetclean']:stepId==='dry'?['tumble','natural']:[stepId];
+  return SYMBOLS.filter(s=>s.standard===standard && groups.includes(s.group));
 }
 export function getSteps(standard){return STEPS.filter(s=>standard==='us'||s.id!=='extras');}

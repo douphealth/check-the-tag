@@ -12,6 +12,7 @@ export function ArticleView({ a, back, image, kind }: { a: Article; back: "/fabr
           <Link to={back} className="inline-flex items-center gap-1.5 text-sm font-semibold opacity-75 hover:opacity-100"><ArrowLeft className="h-4 w-4" />All {kind}</Link>
           <h1 className="mt-8 animate-rise text-4xl leading-[1.05] md:text-6xl">{a.title}</h1>
           <p className="mt-6 max-w-2xl animate-rise text-lg opacity-80">{a.lead}</p>
+          <p className="mt-5 text-xs opacity-65">Check The Tag editorial guide · no independent reviewer claimed · <Link to="/sources" className="underline underline-offset-4">method and sources</Link></p>
         </div>
       </header>
       <div className="mx-auto max-w-4xl px-5 pt-14">

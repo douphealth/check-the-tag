@@ -10,6 +10,8 @@ export const Route = createFileRoute("/guides/")({
       { name: "description", content: "Shrunken sweaters, faded blacks, missing labels and how ISO differs from U.S. marks." },
       { property: "og:title", content: "Laundry care guides & problem solvers" },
       { property: "og:description", content: "Shrunken sweaters, faded blacks, missing labels and how ISO differs from U.S. marks." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Page,

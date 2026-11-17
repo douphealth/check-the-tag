@@ -15,7 +15,7 @@ export const Route = createFileRoute("/symbols/$id")({
     const s = loaderData ? SYMBOL_BY_ID.get(loaderData.id) : undefined;
     if (!s) return { meta: [{ title: "Symbol not found | Check The Tag" }, { name: "robots", content: "noindex" }] };
     const t = `${s.title} — ${GROUP_LABEL[s.group]} symbol meaning | Check The Tag`;
-    return { meta: [{ title: t }, { name: "description", content: s.meaning }, { property: "og:title", content: t }, { property: "og:description", content: s.meaning }] };
+    return { meta: [{ title: t }, { name: "description", content: s.meaning }, { property: "og:title", content: t }, { property: "og:description", content: s.meaning }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }] };
   },
   component: SymbolPage,
 });
@@ -37,8 +37,10 @@ function SymbolPage() {
           <h1 className="mt-3 text-5xl leading-tight md:text-6xl">{s.title}</h1>
           <p className="mt-6 text-xl leading-relaxed">{s.meaning}</p>
           {s.risk && <div className="mt-6 flex gap-3 rounded-2xl border bg-accent/20 p-5"><AlertTriangle className="h-5 w-5 shrink-0 text-destructive" /><p className="text-sm">{s.risk}</p></div>}
-          <a href={src.url} target="_blank" rel="noreferrer" className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">Source: {src.name} <ExternalLink className="h-3.5 w-3.5" /></a>
-          <div className="mt-8"><Link to="/" hash="decoder" className="rounded-full bg-ink px-6 py-3 font-semibold text-ink-foreground">Decode a full label</Link></div>
+          <p className="mt-5 text-sm text-muted-foreground"><span className="font-semibold text-foreground">Restriction:</span> {s.risk || "Follow the complete garment label and any accompanying written instructions."}</p>
+          <a href={src.url} target="_blank" rel="noreferrer" className="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold underline-offset-4 hover:underline">Source: {src.name} · {src.edition} <ExternalLink className="h-3.5 w-3.5" /></a>
+          <p className="mt-3 text-xs text-muted-foreground">Editorial source mapping; no independent certification claimed. <Link to="/sources" className="underline underline-offset-4">Review method and artwork status</Link>.</p>
+          <div className="mt-8"><Link to="/" hash="decoder" search={{ std: s.standard, s: s.id }} className="inline-flex min-h-12 items-center rounded-full bg-ink px-6 py-3 font-semibold text-ink-foreground">Start decoding with this mark</Link></div>
         </div>
       </div>
       {related.length > 0 && (

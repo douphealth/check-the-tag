@@ -9,6 +9,7 @@ import {
   type ErrorComponentProps,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { MotionConfig } from "framer-motion";
 
 import appCss from "../styles.css?url";
 import { SiteHeader, SiteFooter } from "@/components/ctt/SiteChrome";
@@ -128,10 +129,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <SiteHeader />
-      <main><Outlet /></main>
-      <SiteFooter />
-      <Toaster position="bottom-center" />
+      <MotionConfig reducedMotion="user">
+        <SiteHeader />
+        <main><Outlet /></main>
+        <SiteFooter />
+        <Toaster position="bottom-center" />
+      </MotionConfig>
     </QueryClientProvider>
   );
 }
