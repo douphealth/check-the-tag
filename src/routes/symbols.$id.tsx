@@ -14,7 +14,7 @@ export const Route = createFileRoute("/symbols/$id")({
   head: ({ loaderData }) => {
     const s = loaderData ? SYMBOL_BY_ID.get(loaderData.id) : undefined;
     if (!s) return { meta: [{ title: "Symbol not found | Check The Tag" }, { name: "robots", content: "noindex" }] };
-    const t = `${s.title} — ${GROUP_LABEL[s.group]} symbol meaning | Check The Tag`;
+    const t = `${s.title} — ${GROUP_LABEL[s.group]} symbol meaning (${STANDARDS[s.standard].short}) | Check The Tag`;
     return { meta: [{ title: t }, { name: "description", content: s.meaning }, { property: "og:title", content: t }, { property: "og:description", content: s.meaning }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }] };
   },
   component: SymbolPage,
