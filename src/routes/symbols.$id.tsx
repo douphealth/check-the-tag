@@ -4,6 +4,7 @@ import { SYMBOL_BY_ID, SYMBOLS, STANDARDS } from "@/lib/ctt/catalog";
 import { SOURCES } from "@/lib/ctt/provenance";
 import { SymbolIcon } from "@/components/ctt/SymbolIcon";
 import { GROUP_LABEL } from "@/lib/groups";
+import { GROUP_TIPS, counterpart, howToRead, symbolAnswer, symbolFaq } from "@/lib/symbol-content";
 
 export const Route = createFileRoute("/symbols/$id")({
   loader: ({ params }) => {
@@ -15,7 +16,7 @@ export const Route = createFileRoute("/symbols/$id")({
     const s = loaderData ? SYMBOL_BY_ID.get(loaderData.id) : undefined;
     if (!s) return { meta: [{ title: "Symbol not found | Check The Tag" }, { name: "robots", content: "noindex" }] };
     const t = `${s.title} — ${GROUP_LABEL[s.group]} symbol meaning (${STANDARDS[s.standard].short}) | Check The Tag`;
-    return { meta: [{ title: t }, { name: "description", content: s.meaning }, { property: "og:title", content: t }, { property: "og:description", content: s.meaning }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }] };
+    return { meta: [{ title: t }, { name: "description", content: `${s.title} care label symbol (${STANDARDS[s.standard].short}): ${s.meaning}`.slice(0, 158) }, { property: "og:title", content: t }, { property: "og:description", content: s.meaning }, { property: "og:type", content: "article" }, { name: "twitter:card", content: "summary" }] };
   },
   component: SymbolPage,
 });
@@ -24,6 +25,10 @@ function SymbolPage() {
   const { id } = Route.useLoaderData();
   const s = SYMBOL_BY_ID.get(id)!;
   const src = s.standard === "us" ? SOURCES["ftc"]! : SOURCES["ginetex"]!;
+  const twin = counterpart(s);
+  const faq = symbolFaq(s);
+  const ld = JSON.stringify({ "@context": "https://schema.org", "@type": "FAQPage", mainEntity: faq.map((x) => ({ "@type": "Question", name: x.q, acceptedAnswer: { "@type": "Answer", text: x.a } })) }).replace(/</g, "\\u003c");
+  const groupAll = SYMBOLS.filter((x) => x.group === s.group && x.standard === s.standard);
   const related = SYMBOLS.filter((x) => x.group === s.group && x.standard === s.standard && x.id !== s.id);
   return (
     <div className="mx-auto max-w-6xl px-5 pt-10">
@@ -43,6 +48,33 @@ function SymbolPage() {
           <div className="mt-8"><Link to="/" hash="decoder" search={{ std: s.standard, s: s.id }} className="inline-flex min-h-12 items-center rounded-full bg-ink px-6 py-3 font-semibold text-ink-foreground">Start decoding with this mark</Link></div>
         </div>
       </div>
+      <section className="mt-16 grid gap-8 md:grid-cols-2">
+        <div>
+          <h2 className="text-3xl">What does this symbol mean?</h2>
+          <p className="mt-4 text-lg leading-relaxed">{symbolAnswer(s)}</p>
+          <h3 className="mt-8 text-xl font-semibold">How to recognise it</h3>
+          <p className="mt-2 text-muted-foreground leading-relaxed">{howToRead(s)}</p>
+        </div>
+        <div className="rounded-3xl border bg-card p-6">
+          <h2 className="text-2xl">{s.standard === "iso" ? "US label equivalent" : "International (ISO) equivalent"}</h2>
+          {twin ? (<Link to="/symbols/$id" params={{ id: twin.id }} className="mt-4 flex items-center gap-4 hover:opacity-80"><SymbolIcon symbol={twin} className="h-14 w-14 shrink-0 text-ink" /><span><span className="block font-semibold">{twin.title}</span><span className="text-sm text-muted-foreground">{twin.meaning}</span></span></Link>)
+            : <p className="mt-4 text-sm text-muted-foreground">No direct equivalent in the {s.standard === "iso" ? "US (FTC / ASTM)" : "ISO 3758"} system in our catalogue. Read the full label and any written instructions.</p>}
+          <h3 className="mt-8 text-lg font-semibold">Practical tips for {GROUP_LABEL[s.group]?.toLowerCase()}</h3>
+          <ul className="mt-2 list-disc space-y-1.5 pl-5 text-sm text-muted-foreground">{(GROUP_TIPS[s.group] ?? []).map((t) => <li key={t}>{t}</li>)}</ul>
+        </div>
+      </section>
+      {groupAll.length > 1 && (
+        <section className="mt-16">
+          <h2 className="text-3xl">All {STANDARDS[s.standard].short} {GROUP_LABEL[s.group]?.toLowerCase()} symbols compared</h2>
+          <div className="mt-6 overflow-x-auto rounded-2xl border"><table className="w-full text-sm"><thead><tr className="text-left"><th className="p-3">Symbol</th><th className="p-3">Meaning</th></tr></thead>
+            <tbody>{groupAll.map((x) => <tr key={x.id} className={`border-t ${x.id === s.id ? "bg-accent/20" : ""}`}><td className="p-3 font-semibold whitespace-nowrap">{x.id === s.id ? x.title : <Link to="/symbols/$id" params={{ id: x.id }} className="underline-offset-4 hover:underline">{x.title}</Link>}</td><td className="p-3 text-muted-foreground">{x.meaning}</td></tr>)}</tbody></table></div>
+        </section>
+      )}
+      <section className="mt-16">
+        <h2 className="text-3xl">Frequently asked questions</h2>
+        <div className="mt-6 divide-y rounded-2xl border">{faq.map((x) => <div key={x.q} className="p-5"><h3 className="font-semibold">{x.q}</h3><p className="mt-2 text-muted-foreground leading-relaxed">{x.a}</p></div>)}</div>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: ld }} />
+      </section>
       {related.length > 0 && (
         <section className="mt-20">
           <h2 className="text-3xl">Related {GROUP_LABEL[s.group]?.toLowerCase()} marks</h2>
