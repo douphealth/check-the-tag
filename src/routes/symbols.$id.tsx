@@ -5,7 +5,8 @@ import { SOURCES } from "@/lib/ctt/provenance";
 import { SymbolIcon } from "@/components/ctt/SymbolIcon";
 import { GROUP_LABEL } from "@/lib/groups";
 import { GROUP_TIPS, counterpart, howToRead, symbolAnswer, symbolFaq } from "@/lib/symbol-content";
-import { OfferSlot } from "@/components/OfferSlot";
+import { AmazonPicks } from "@/components/AmazonPicks";
+import { symbolPicks } from "@/lib/picks";
 
 export const Route = createFileRoute("/symbols/$id")({
   loader: ({ params }) => {
@@ -71,7 +72,7 @@ function SymbolPage() {
             <tbody>{groupAll.map((x) => <tr key={x.id} className={`border-t ${x.id === s.id ? "bg-accent/20" : ""}`}><td className="p-3 font-semibold whitespace-nowrap">{x.id === s.id ? x.title : <Link to="/symbols/$id" params={{ id: x.id }} className="underline-offset-4 hover:underline">{x.title}</Link>}</td><td className="p-3 text-muted-foreground">{x.meaning}</td></tr>)}</tbody></table></div>
         </section>
       )}
-      <OfferSlot id="laundry-care" context={s.title} />
+      <div className="-mx-5"><AmazonPicks title="Products that suit this label" intro="Matched to what this symbol allows. Always check the product's own instructions for your fabric." picks={symbolPicks(s)} /></div>
       <section className="mt-16">
         <h2 className="text-3xl">Frequently asked questions</h2>
         <div className="mt-6 divide-y rounded-2xl border">{faq.map((x) => <div key={x.q} className="p-5"><h3 className="font-semibold">{x.q}</h3><p className="mt-2 text-muted-foreground leading-relaxed">{x.a}</p></div>)}</div>

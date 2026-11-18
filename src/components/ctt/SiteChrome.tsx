@@ -60,6 +60,7 @@ export function SiteFooter() {
         </div>
         <div className="grid grid-cols-2 gap-2 text-sm">
           {NAV.map((n) => <Link key={n.to} to={n.to} className="opacity-80 hover:opacity-100">{n.label}</Link>)}
+          <a href="/privacy" className="opacity-80 hover:opacity-100">Privacy policy</a>
         </div>
         <p className="text-sm opacity-60 md:text-right">Always defer to the garment maker's full label. No account required; saved garments stay in this browser and can be lost when site data is cleared.</p>
       </div>
