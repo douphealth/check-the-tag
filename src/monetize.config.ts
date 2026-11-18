@@ -11,4 +11,4 @@ export const OFFER_LINKS: Record<string, string> = {};
 
 // Amazon Associates: set tag to this site's tracking ID (e.g. "mysite-20") and domain to your Associates store.
 // Empty tag = no Amazon links are rendered anywhere.
-export const AMAZON = { tag: "", domain: "www.amazon.com" };
+export const AMAZON = { tag: "papalex-checkthetag-20", domain: "www.amazon.com" };
