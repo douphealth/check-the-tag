@@ -31,8 +31,9 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-1 md:flex">
           {NAV.map((n) => (
             <Link key={n.to} to={n.to} activeOptions={{ exact: n.to === "/" }}
-              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              activeProps={{ className: "bg-ink text-ink-foreground hover:text-ink-foreground" }}>
+              className="rounded-full px-4 py-2 text-sm font-medium transition-colors"
+              activeProps={{ className: "bg-ink text-ink-foreground" }}
+              inactiveProps={{ className: "text-muted-foreground hover:text-foreground" }}>
               {n.label}
             </Link>
           ))}

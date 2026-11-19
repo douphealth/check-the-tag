@@ -121,7 +121,7 @@ export function Decoder() {
             const status = s.id === "extras" ? (has ? "provided" : "unknown") : result.states[s.id as CategoryId];
             return (
               <button key={s.id} onClick={() => setStep(s.id)} aria-label={`${s.label} category`} aria-pressed={step === s.id} className={cn("tile flex min-h-12 shrink-0 items-center gap-2 rounded-2xl border px-4 py-2.5 text-sm font-semibold", step === s.id ? "border-ink bg-ink text-ink-foreground" : "bg-background")}>
-                <span className="font-mono text-xs opacity-60">{s.number}</span>{s.short}
+                <span className="font-mono text-xs opacity-80">{s.number}</span>{s.short}
                 {status === "provided" && <span className="grid h-4 w-4 place-items-center rounded-full bg-clay text-accent-foreground" aria-label="Entered"><Check className="h-3 w-3" /></span>}
                 {(status === "absent" || status === "unreadable") && <span className="h-2 w-2 rounded-full bg-clay" aria-label={status === "absent" ? "Marked not on label" : "Marked unreadable"} />}
               </button>
@@ -191,7 +191,7 @@ export function Decoder() {
             </div>
           </div>
 
-          <div className="mt-6 flex min-h-12 flex-wrap gap-2" aria-label="Selected symbols">
+          <div className="mt-6 flex min-h-12 flex-wrap gap-2" role="group" aria-label="Selected symbols">
             <AnimatePresence>
               {result.selected.map((s) => (
                 <motion.button layout key={s.id} initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0, opacity: 0 }}
