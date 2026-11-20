@@ -1,6 +1,8 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { GUIDE_ARTICLES } from "@/lib/articles";
 import { ArticleView } from "@/components/ctt/ArticleView";
+import { AmazonPicks } from "@/components/AmazonPicks";
+import { guidePicks } from "@/lib/picks";
 
 export const Route = createFileRoute("/guides/$slug")({
   loader: ({ params }) => {
@@ -18,5 +20,5 @@ export const Route = createFileRoute("/guides/$slug")({
 
 function Page() {
   const a = Route.useLoaderData();
-  return <ArticleView a={a} back="/guides" kind="guides"  />;
+  return <><ArticleView a={a} back="/guides" kind="guides" /><AmazonPicks title="Products for this job" intro="Matched to this guide. Always follow the item's own care label first." picks={guidePicks(a.slug)} /></>;
 }

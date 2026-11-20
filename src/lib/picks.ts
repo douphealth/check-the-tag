@@ -20,6 +20,12 @@ const P = {
   spray: { label: "Wrinkle release spray", query: "wrinkle release spray", why: "Smooths creases without an iron. Test on a hidden area first." },
   bag: { label: "Breathable garment bag", query: "breathable garment bag", why: "Stores professionally cleaned items without trapping moisture." },
   steamer: { label: "Handheld garment steamer", query: "handheld garment steamer", why: "Refreshes items between professional cleans. Check the label first." },
+  softBrush: { label: "Soft-bristle cleaning brush", query: "soft bristle cleaning brush", why: "Lifts dirt from fabric without roughing up the surface." },
+  capShaper: { label: "Cap shaper or drying form", query: "baseball cap shaper drying form", why: "Holds a cap's shape while it air-dries." },
+  pillowProtector: { label: "Zippered pillow protectors", query: "zippered pillow protectors", why: "Keeps the pillow itself cleaner so it needs washing less often." },
+  wbCover: { label: "Removable weighted-blanket cover", query: "weighted blanket duvet cover", why: "A washable cover means the heavy insert rarely needs washing." },
+  downWash: { label: "Down wash detergent", query: "down wash detergent", why: "Cleans down without stripping the natural oils that give it loft." },
+  shoeKit: { label: "Sneaker cleaning kit", query: "sneaker cleaning kit", why: "Brush and cleaner for scrubbing uppers and soles by hand." },
 } satisfies Record<string, Pick>;
 
 export function symbolPicks(s: CareSymbol): Pick[] {
@@ -44,3 +50,11 @@ const FABRIC: Record<string, Pick[]> = {
   viscose: [P.delicate, P.flatRack], blends: [P.delicate, P.mesh],
 };
 export const fabricPicks = (slug: string): Pick[] => FABRIC[slug] ?? [];
+
+const GUIDE: Record<string, Pick[]> = {
+  "how-to-wash-a-weighted-blanket": [P.delicate, P.balls, P.wbCover], "how-to-wash-a-hat": [P.delicate, P.softBrush, P.capShaper],
+  "how-to-wash-pillows": [P.balls, P.detergent, P.pillowProtector], "how-to-wash-a-backpack": [P.delicate, P.softBrush, P.mesh],
+  "how-to-wash-a-comforter": [P.downWash, P.balls, P.delicate], "how-to-wash-shoes": [P.shoeKit, P.mesh, P.softBrush],
+  "how-to-wash-a-down-jacket": [P.downWash, P.balls, P.mesh], "how-to-wash-towels": [P.detergent, P.balls, P.oxygen],
+};
+export const guidePicks = (slug: string): Pick[] => GUIDE[slug] ?? [];
