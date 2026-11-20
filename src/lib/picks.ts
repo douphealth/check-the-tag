@@ -30,6 +30,10 @@ const P = {
   storageSack: { label: "Sleeping bag storage sack", query: "sleeping bag storage sack", why: "Stores the bag loosely so the fill keeps its loft." },
   matCleaner: { label: "Yoga mat cleaner", query: "yoga mat cleaner spray", why: "Check it is suitable for your mat's material first." },
   dogBedCover: { label: "Waterproof dog bed cover", query: "waterproof dog bed cover washable", why: "A washable cover protects the insert from accidents." },
+  mfWash: { label: "Microfiber detergent", query: "microfiber detergent", why: "Residue-free wash that keeps microfiber fibres open. No softener." },
+  showerLiner: { label: "Washable fabric shower liner", query: "washable fabric shower curtain liner", why: "A machine-washable liner that won't crack like vinyl." },
+  bathMat: { label: "Quick-dry bath mat", query: "quick dry bath mat machine washable", why: "A spare to swap in while the other one is in the wash." },
+  rugCleaner: { label: "Rug and carpet spot cleaner", query: "rug spot cleaner", why: "Pick one suited to your rug's fibre, and test a hidden corner." },
   spareProtector: { label: "Spare waterproof mattress protector", query: "waterproof mattress protector", why: "Keeps the bed covered while the other one is in the wash." },
 } satisfies Record<string, Pick>;
 
@@ -65,5 +69,9 @@ const GUIDE: Record<string, Pick[]> = {
   "how-to-wash-a-sleeping-bag": [P.downWash, P.balls, P.storageSack], "how-to-clean-a-yoga-mat": [P.matCleaner, P.softBrush, P.delicate],
   "how-to-clean-a-tie": [P.steamer, P.silk, P.cloth], "how-to-wash-a-dog-bed": [P.enzyme, P.detergent, P.dogBedCover],
   "how-to-wash-a-bra": [P.mesh, P.delicate, P.rack], "how-to-wash-a-mattress-protector": [P.detergent, P.balls, P.spareProtector],
+  "how-to-wash-an-electric-blanket": [P.delicate, P.rack], "how-to-wash-microfiber-cloths": [P.mfWash, P.rack],
+  "how-to-wash-a-shower-curtain": [P.showerLiner, P.detergent], "how-to-wash-a-bath-mat": [P.detergent, P.rack, P.bathMat],
+  "how-to-wash-a-memory-foam-pillow": [P.pillowProtector, P.delicate], "how-to-wash-a-rug": [P.rugCleaner, P.softBrush, P.detergent],
+  "how-to-wash-curtains": [P.steamer, P.delicate, P.mesh], "how-to-wash-a-fleece-blanket": [P.delicate, P.softBrush, P.rack],
 };
 export const guidePicks = (slug: string): Pick[] => GUIDE[slug] ?? [];
